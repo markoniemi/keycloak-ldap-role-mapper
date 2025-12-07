@@ -1,0 +1,41 @@
+services:
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:26.4
+    ports:
+      - 9090:8080
+      - 9000:9000
+      - 8787:8787
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      DEBUG: true
+      DEBUG_PORT: 8787
+      KC_LOG_LEVEL: INFO,org.keycloak.storage.ldap.mappers.membership.role:DEBUG
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+      - ./src/test/resources:/opt/keycloak/data/import
+      - ./target:/opt/keycloak/providers
+    command:
+      - 'start-dev'
+      - '--import-realm'
+      
+  lldap:
+    container_name: lldap
+    image: lldap/lldap:v0.6.1-alpine
+    ports:
+      - 17170:17170
+      - 3890:3890
+      - 6360:6360
+    volumes:
+      - lldap_data:/data
+    environment:
+      - LLDAP_LDAP_BASE_DN=dc=example,dc=com
+      - LLDAP_LDAP_USER_PASS=admin123
+      
+volumes:
+  keycloak_data:
+  lldap_data:
+    driver: local
+
+              

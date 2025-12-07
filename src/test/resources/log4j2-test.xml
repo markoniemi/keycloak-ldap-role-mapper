@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="ERROR">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%highlight{%-5level %logger{1.1}: %msg%n%throwable}" disableAnsi="false"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="Console" />
+        </Root>
+		<Logger name="org.apache.cxf.jaxb.JAXBContextInitializer" level="WARN"/>
+		<Logger name="org.example" level="DEBUG"/>
+		<Logger name="org.springframework" level="WARN"/>
+		<Logger name="org.springframework.web.servlet.mvc" level="WARN"/>
+		<Logger name="org.springmvc" level="WARN"/>
+		<Logger name="DefaultCssErrorHandler" level="OFF" />
+		<Logger name="com.gargoylesoftware" level="OFF" />
+		<Logger name="org.hibernate" level="ERROR" />
+		<Logger name="org.apache.logging" level="ERROR" />
+		<Logger name="org.apache.tomcat.util.scan" level="ERROR" />
+    <Logger name="com.github.springtestdbunit" level="DEBUG" />
+    </Loggers>
+</Configuration>
