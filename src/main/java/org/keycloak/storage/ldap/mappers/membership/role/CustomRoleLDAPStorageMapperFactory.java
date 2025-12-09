@@ -18,7 +18,9 @@ public class CustomRoleLDAPStorageMapperFactory extends RoleLDAPStorageMapperFac
 
   @Override
   public List<ProviderConfigProperty> getConfigProperties(RealmModel realm, ComponentModel parent) {
-    super.configProperties.addAll(
+    configProperties.clear();
+    configProperties.addAll(super.getConfigProperties(realm, parent));
+    configProperties.addAll(
         ProviderConfigurationBuilder.create()
             .property()
             .name(CustomRoleMapperConfig.FIND_IN_ROLE_NAME)
