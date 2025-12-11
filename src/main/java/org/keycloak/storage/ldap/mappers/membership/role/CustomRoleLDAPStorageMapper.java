@@ -7,7 +7,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.keycloak.component.ComponentModel;
 import org.keycloak.models.ClientModel;
 import org.keycloak.models.ModelException;
@@ -31,9 +32,9 @@ import org.keycloak.storage.ldap.mappers.membership.LDAPGroupMapperMode;
 import org.keycloak.storage.ldap.mappers.membership.UserRolesRetrieveStrategy;
 import org.keycloak.storage.user.SynchronizationResult;
 
-import lombok.extern.slf4j.Slf4j;
-
-// implementation is based on RoleLDAPStorageMapper, but cannot extend from it because config and factory attributes are private final.
+// implementation is based on RoleLDAPStorageMapper
+// (https://github.com/keycloak/keycloak/blob/main/federation/ldap/src/main/java/org/keycloak/storage/ldap/mappers/membership/role/RoleLDAPStorageMapper.java),
+// but cannot extend from it because config and factory attributes are private final.
 @Slf4j
 public class CustomRoleLDAPStorageMapper extends AbstractLDAPStorageMapper
     implements CommonLDAPGroupMapper {
@@ -62,44 +63,41 @@ public class CustomRoleLDAPStorageMapper extends AbstractLDAPStorageMapper
   @Override
   public void onImportUserFromLDAP(
       LDAPObject ldapUser, UserModel user, RealmModel realm, boolean isCreate) {
+    log.debug("onImportUserFromLDAP: user: {}", ldapUser.getUuid());
     LDAPGroupMapperMode mode = config.getMode();
 
     // For now, import LDAP role mappings just during create
-    if (mode == LDAPGroupMapperMode.IMPORT && isCreate) {
+    //    if (mode == LDAPGroupMapperMode.IMPORT && isCreate) {
 
-      List<LDAPObject> ldapRoles = getLDAPRoleMappings(ldapUser);
+    List<LDAPObject> ldapRoles = getLDAPRoleMappings(ldapUser);
 
-      // Import role mappings from LDAP into Keycloak DB
-      String roleNameAttr = config.getRoleNameLdapAttribute();
+    // Import role mappings from LDAP into Keycloak DB
+    String roleNameAttr = config.getRoleNameLdapAttribute();
 
-      RoleContainerModel roleContainer = getTargetRoleContainer(realm);
-      if (roleContainer == null) {
-        log.warn(
-            "Ignored client role grant for federation mapper '{}' as client not found: '{}'",
-            mapperModel.getName(),
-            config.getClientId());
-        return;
-      }
-
-      for (LDAPObject ldapRole : ldapRoles) {
-        String roleName = replaceRoleName(ldapRole.getAttributeAsString(roleNameAttr));
-        RoleModel role = roleContainer.getRole(roleName);
-
-        if (role == null) {
-          role = roleContainer.addRole(roleName);
-        }
-
-        log.debug(
-            "Granting role [{}] to user [{}] during import from LDAP",
-            roleName,
-            user.getUsername());
-        user.grantRole(role);
-      }
+    RoleContainerModel roleContainer = getTargetRoleContainer(realm);
+    if (roleContainer == null) {
+      log.warn(
+          "Ignored client role grant for federation mapper '{}' as client not found: '{}'",
+          mapperModel.getName(),
+          config.getClientId());
+      return;
     }
-  }
 
-  private String replaceRoleName(String roleName) {
-    return roleName.replace(config.getFindInRoleName(), config.getReplaceInRoleName());
+    for (LDAPObject ldapRole : ldapRoles) {
+      String roleName = replaceRoleName(ldapRole.getAttributeAsString(roleNameAttr));
+      RoleModel role = roleContainer.getRole(roleName);
+
+      if (role == null) {
+        role = roleContainer.addRole(roleName);
+      }
+
+      log.debug(
+          "Granting role [{}] to user [{}] during import from LDAP",
+          role.getName(),
+          user.getUsername());
+      user.grantRole(role);
+    }
+    //    }
   }
 
   @Override
@@ -293,6 +291,13 @@ public class CustomRoleLDAPStorageMapper extends AbstractLDAPStorageMapper
   protected String getMembershipUserLdapAttribute() {
     LDAPConfig ldapConfig = ldapProvider.getLdapIdentityStore().getConfig();
     return config.getMembershipUserLdapAttribute(ldapConfig);
+  }
+
+  protected String replaceRoleName(String roleName) {
+    return config.getAddRoleNamePrefix()
+        + (StringUtils.isBlank(config.getRemoveInRoleName())
+            ? roleName
+            : roleName.replace(config.getRemoveInRoleName(), ""));
   }
 
   public class LDAPRoleMappingsUserDelegate extends UserModelDelegate {

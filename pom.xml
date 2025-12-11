@@ -34,20 +34,6 @@
       <groupId>org.keycloak</groupId>
       <artifactId>keycloak-services</artifactId>
       <scope>provided</scope>
-<!--      <exclusions>-->
-<!--        <exclusion>-->
-<!--          <groupId>org.jboss.logging</groupId>-->
-<!--          <artifactId>jboss-logging</artifactId>-->
-<!--        </exclusion>-->
-<!--        <exclusion>-->
-<!--          <groupId>org.jboss.logmanager</groupId>-->
-<!--          <artifactId>jboss-logmanager</artifactId>-->
-<!--        </exclusion>-->
-<!--        <exclusion>-->
-<!--          <groupId>org.jboss.slf4j</groupId>-->
-<!--          <artifactId>slf4j-jboss-logmanager</artifactId>-->
-<!--        </exclusion>-->
-<!--      </exclusions>-->
     </dependency>
     <dependency>
       <groupId>org.keycloak</groupId>
@@ -57,77 +43,18 @@
     <dependency>
       <groupId>com.google.auto.service</groupId>
       <artifactId>auto-service</artifactId>
-      <optional>true</optional>
+      <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <scope>provided</scope>
+    </dependency>    
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>junit-jupiter</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.dasniko</groupId>
-      <artifactId>testcontainers-keycloak</artifactId>
-      <version>3.4.0</version>
-      <scope>test</scope>
-<!--      <exclusions>-->
-<!--        <exclusion>-->
-<!--          <groupId>org.jboss.logging</groupId>-->
-<!--          <artifactId>jboss-logging</artifactId>-->
-<!--        </exclusion>-->
-<!--      </exclusions>-->
-    </dependency>
-    <dependency>
-      <groupId>org.testcontainers</groupId>
-      <artifactId>testcontainers-ldap</artifactId>
-      <version>2.0.2</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.springframework.boot</groupId>
-          <artifactId>spring-boot-starter-logging</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-log4j2</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-oauth2-client</artifactId>
-      <scope>test</scope>
-    </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.boot</groupId>-->
-<!--      <artifactId>spring-boot-devtools</artifactId>-->
-<!--      <scope>test</scope>-->
-<!--    </dependency>-->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-testcontainers</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.github.dasniko</groupId>
-      <artifactId>testcontainers-keycloak</artifactId>
-      <version>3.4.0</version>
-      <scope>test</scope>
+      <version>1.18.42</version>
     </dependency>
   </dependencies>
 
@@ -143,10 +70,6 @@
           <target>${java.version}</target>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-maven-plugin</artifactId>
-      </plugin>
     </plugins>
   </build>
 
@@ -158,43 +81,12 @@
         <version>${keycloak.version}</version>
         <type>pom</type>
         <scope>import</scope>
-<!--        <exclusions>-->
-<!--          <exclusion>-->
-<!--            <groupId>org.jboss.logging</groupId>-->
-<!--            <artifactId>jboss-logging</artifactId>-->
-<!--          </exclusion>-->
-<!--          <exclusion>-->
-<!--            <groupId>org.jboss.logmanager</groupId>-->
-<!--            <artifactId>jboss-logmanager</artifactId>-->
-<!--          </exclusion>-->
-<!--        </exclusions>-->
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-dependencies</artifactId>
-        <version>${spring.boot.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-        <exclusions>
-          <exclusion>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-logging</artifactId>
-          </exclusion>
-        </exclusions>
-      </dependency>
-      <dependency>
-        <groupId>org.springframework.cloud</groupId>
-        <artifactId>spring-cloud-dependencies</artifactId>
-        <version>${spring-cloud.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
       </dependency>
       <dependency>
         <groupId>com.google.auto.service</groupId>
         <artifactId>auto-service</artifactId>
         <version>${auto-service.version}</version>
         <scope>provided</scope>
-        <optional>true</optional>
       </dependency>
     </dependencies>
   </dependencyManagement>
