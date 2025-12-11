@@ -985,7 +985,7 @@
                   "(cn=*_INT_CD)"
                 ],
                 "mode": [
-                  "IMPORT"
+                  "READ_ONLY"
                 ],
                 "remove.in.role.name": [
                   "_ENV_INT_CD"
@@ -1157,11 +1157,11 @@
           "startTls": [
             "false"
           ],
-          "connectionPooling": [
-            "true"
-          ],
           "usersDn": [
             "ou=people,dc=example,dc=com"
+          ],
+          "connectionPooling": [
+            "true"
           ],
           "cachePolicy": [
             "DEFAULT"
@@ -1175,20 +1175,20 @@
           "enabled": [
             "true"
           ],
-          "usernameLDAPAttribute": [
-            "uid"
+          "changedSyncPeriod": [
+            "-1"
           ],
           "bindDn": [
             "uid=admin,ou=people,dc=example,dc=com"
           ],
-          "changedSyncPeriod": [
-            "-1"
+          "usernameLDAPAttribute": [
+            "uid"
           ],
           "bindCredential": [
             "**********"
           ],
           "lastSync": [
-            "1765432874"
+            "1765463910"
           ],
           "vendor": [
             "other"

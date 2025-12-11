@@ -403,7 +403,7 @@ public class CustomRoleLDAPStorageMapper extends AbstractLDAPStorageMapper
           ldapRoles.stream()
               .map(
                   role -> {
-                    String roleName = role.getAttributeAsString(roleNameLdapAttr);
+                    String roleName = replaceRoleName(role.getAttributeAsString(roleNameLdapAttr));
                     RoleModel modelRole = roleContainer.getRole(roleName);
                     if (modelRole == null) {
                       // Add role to local DB
